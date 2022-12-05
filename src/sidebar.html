@@ -7,10 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <pre class="bg-gray-900 rounded p-2">
-      <code id="selection" class="text-white font-mono leading-tight">
-      </code>
+    <!-- Hidden for now -->
+    <pre class="bg-gray-900 rounded p-2 hidden">
+      <code id="selection" class="text-white font-mono leading-tight"></code>
     </pre>
+
+    <h1 class="mb-2">Type your question:</h1>
+
+    <span
+      id="prompt-input"
+      class="p-2 text-white bg-stone-700 text-sm block w-full overflow-hidden resize-none min-h-40 line-height-20"
+      role="textbox"
+      contenteditable
+    ></span>
+
+    <div class="flex gap-x-1 mt-2 justify-end">
+      <button
+        class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100"
+        id="submit-btn"
+      >
+        Ask
+      </button>
+    </div>
+
     <h1 class="mb-2">Quick shortcuts</h1>
     <div class="flex gap-x-1 mb-2 flex-wrap gap-y-1">
       <button
@@ -32,21 +51,9 @@
         Explain error
       </button>
     </div>
-    <h1 class="mb-2">Or type your question:</h1>
-    <input
-      class="h-10 w-full text-white bg-stone-700 p-4 text-sm"
-      type="text"
-      id="prompt-input"
-    />
-    <div class="flex gap-x-1 mt-2 justify-end">
-      <button
-        class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100"
-        id="submit-btn"
-      >
-        Ask
-      </button>
-    </div>
-    <div id="response" class="pt-4 text-lg"></div>
+
+    <div id="response" class="p-2 text-sm"></div>
+
     <script src="${scriptUri}"></script>
   </body>
 </html>
