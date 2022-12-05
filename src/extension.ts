@@ -2,6 +2,9 @@ import * as vscode from "vscode";
 import { ChatGPTAPI } from "./chatgpt";
 import sidebarHTML from "./sidebar.html";
 
+const IS_HEADLESS = true;
+// const IS_HEADLESS = false;
+
 // Command palette
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -36,7 +39,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
    * You can set this to "true" once you have authenticated within the headless chrome.
    */
   private _chatGPTAPI = new ChatGPTAPI({
-    headless: true,
+    headless: IS_HEADLESS,
   });
 
   constructor(private readonly _extensionUri: vscode.Uri) {}
