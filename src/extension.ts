@@ -2,8 +2,8 @@ import * as vscode from "vscode";
 import { ChatGPTAPI } from "./chatgpt";
 import sidebarHTML from "./sidebar.html";
 
-const IS_HEADLESS = true;
-// const IS_HEADLESS = false;
+// const IS_HEADLESS = true;
+const IS_HEADLESS = false;
 
 // Command palette
 // This method is called when your extension is activated
