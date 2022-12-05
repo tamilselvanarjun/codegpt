@@ -104,6 +104,8 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 	${prompt}`;
     }
 
+    console.log(searchPrompt);
+
     const response = await this._chatGPTAPI.sendMessage(searchPrompt);
 
     if (this._view) {
@@ -126,14 +128,17 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 				<script src="https://cdn.tailwindcss.com"></script>
 			</head>
 			<body>
-        <h1 class="mb-2">Type your question</h1>
-        
-				<input class="h-10 w-full text-white bg-stone-700 p-4 text-lg font-mono" type="text" id="prompt-input" />
-
-        <button id="explain-code-btn">Explain code</button>
+        <h1 class="mb-2">Type your question:</h1>
+				<input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" 
+          type="text" id="prompt-input" />
+        <div class="flex gap-x-1 mt-2">
+          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
+            id="explain-code-btn">Explain code</button>
+          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
+            id="explain-code-btn">Fix bugs</button>
+        </div>
 				<div id="response" class="pt-4 text-lg">
 				</div>
-
 				<script src="${scriptUri}"></script>
 			</body>
 			</html>`;
