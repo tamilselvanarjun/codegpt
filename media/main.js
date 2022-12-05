@@ -18,6 +18,9 @@
         response = "";
         break;
       }
+      case "updateSelection": {
+        document.getElementById("selection").innerHTML = message.value;
+      }
     }
   });
 

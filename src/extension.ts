@@ -70,9 +70,28 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         vscode.window.activeTextEditor?.insertSnippet(
           new vscode.SnippetString(code)
         );
+      } else if (data.type === "send to terminal") {
+        // Send text to the active terminal
+        // const terminal = vscode.window.activeTerminal;
+        // terminal?.sendText("pwd");
+        const terminal = vscode.window.activeTerminal;
+        if (terminal) {
+          terminal.sendText(data.value);
+        }
       } else if (data.type === "prompt") {
         this.search(data.value ?? "");
       }
+    });
+
+    // Listen to current selection and send it to main.js
+    vscode.window.onDidChangeTextEditorSelection((event) => {
+      const selection = event.selections[0];
+      const selectionText =
+        vscode.window.activeTextEditor?.document.getText(selection);
+      webviewView.webview.postMessage({
+        type: "updateSelection",
+        value: selectionText,
+      });
     });
   }
 
