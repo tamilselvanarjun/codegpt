@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-import { ChatGPTAPI } from "chatgpt";
+import { ChatGPTAPI } from "./chatgpt";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -126,8 +126,11 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 				<script src="https://cdn.tailwindcss.com"></script>
 			</head>
 			<body>
+        <h1 class="mb-2">Type your question</h1>
+        
 				<input class="h-10 w-full text-white bg-stone-700 p-4 text-lg font-mono" type="text" id="prompt-input" />
 
+        <button id="explain-code-btn">Explain code</button>
 				<div id="response" class="pt-4 text-lg">
 				</div>
 

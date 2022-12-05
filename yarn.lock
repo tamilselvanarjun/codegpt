@@ -597,14 +597,6 @@ chalk@^4.0.0, chalk@^4.1.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chatgpt@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/chatgpt/-/chatgpt-0.4.1.tgz#ed4f335c9bc6475978f457023cc4010036fa3b84"
-  integrity sha512-PzAiZUL2y1jswlzUace1LGP6AMKkGc4/kXaCeKi0PAjdySTm3FrJ+j3sk52RDayL6fHQHBsY1q0EEq0pkUETdw==
-  dependencies:
-    html-to-md "npm:@fisch0920/html-to-md@^0.8.1"
-    playwright "^1.28.1"
-
 chokidar@3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
