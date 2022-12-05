@@ -70,7 +70,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         vscode.window.activeTextEditor?.insertSnippet(
           new vscode.SnippetString(code)
         );
-      } else if (data.type === "send to terminal") {
+      } else if (data.type === "sendToTerminal") {
         // Send text to the active terminal
         // const terminal = vscode.window.activeTerminal;
         // terminal?.sendText("pwd");
@@ -115,10 +115,11 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
 	${prompt}`;
     } else {
-      searchPrompt = `This is the ${languageId} file I'm working on:
-	${surroundingText}
+      //     searchPrompt = `This is the ${languageId} file I'm working on:
+      // ${surroundingText}
 
-	${prompt}`;
+      // ${prompt}`;
+      searchPrompt = prompt;
     }
 
     console.log(searchPrompt);

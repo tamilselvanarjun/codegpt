@@ -66,13 +66,25 @@
   document
     .getElementById("prompt-input")
     .addEventListener("keyup", function (e) {
+      const value = document.getElementById("prompt-input").innerText;
       if (e.keyCode === 13) {
         vscode.postMessage({
           type: "prompt",
-          value: this.value,
+          value: value,
         });
+        // TODO: None of this works to prevent the Enter key from adding a newline
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
       }
     });
+  document.getElementById("submit-btn").addEventListener("click", function () {
+    const value = document.getElementById("prompt-input").innerText;
+    vscode.postMessage({
+      type: "prompt",
+      value: value,
+    });
+  });
 
   document
     .getElementById("explain-code-btn")
