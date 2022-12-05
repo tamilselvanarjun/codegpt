@@ -109,6 +109,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       await this._chatGPTAPI.init();
     }
 
+    // Get the active document's text
     const languageId = vscode.window.activeTextEditor?.document.languageId;
     const surroundingText = vscode.window.activeTextEditor?.document.getText();
 
