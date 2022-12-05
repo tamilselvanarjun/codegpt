@@ -94,12 +94,19 @@
     });
   });
 
-  document
-    .getElementById("explain-code-btn")
-    .addEventListener("click", function () {
+  const elementIds = ["explain-code-btn", "explain-error-btn", "fix-bugs-btn"];
+  const prompts = [
+    "Explain this code:",
+    "I am getting this error: ",
+    "Fix bugs in this code. Don't suggest any other code quality improvements. If there are no bugs, then say there are no bugs.",
+  ];
+
+  for (const id of elementIds) {
+    document.getElementById(id).addEventListener("click", function () {
       vscode.postMessage({
         type: "prompt",
-        value: "Explain this code.",
+        value: prompts[elementIds.indexOf(id)],
       });
     });
+  }
 })();
