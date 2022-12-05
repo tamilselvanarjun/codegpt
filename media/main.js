@@ -18,6 +18,14 @@
         response = "";
         break;
       }
+      case "setLoading": {
+        isLoading = message.value;
+        if (isLoading) {
+          document.getElementById("loading-spinner").classList.remove("hidden");
+        } else {
+          document.getElementById("loading-spinner").classList.add("hidden");
+        }
+      }
       case "updateSelection": {
         document.getElementById("selection").innerHTML = message.value;
       }

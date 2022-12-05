@@ -96,6 +96,11 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
   }
 
   public async search(prompt: string) {
+    this._view?.webview.postMessage({
+      type: "setLoading",
+      value: true,
+    });
+
     const isSignedIn = await this._chatGPTAPI.getIsSignedIn();
     if (!isSignedIn) {
       await this._chatGPTAPI.init();
@@ -128,6 +133,10 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
     if (this._view) {
       this._view.show?.(true);
+      this._view?.webview.postMessage({
+        type: "setLoading",
+        value: false,
+      });
       this._view.webview.postMessage({ type: "addResponse", value: response });
     }
   }
