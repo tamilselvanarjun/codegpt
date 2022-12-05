@@ -21,9 +21,12 @@
       case "setLoading": {
         isLoading = message.value;
         if (isLoading) {
+          document.getElementById("response-text").innerHTML = "";
           document.getElementById("loading-spinner").classList.remove("hidden");
+          document.getElementById("loading-spinner").classList.add("flex");
         } else {
           document.getElementById("loading-spinner").classList.add("hidden");
+          document.getElementById("loading-spinner").classList.remove("flex");
         }
       }
       case "updateSelection": {
@@ -35,11 +38,11 @@
   function setResponse() {
     var converter = new showdown.Converter();
     html = converter.makeHtml(response);
-    document.getElementById("response").innerHTML = html;
+    document.getElementById("response-text").innerHTML = html;
 
     var preCodeBlocks = document.querySelectorAll("pre code");
     for (var i = 0; i < preCodeBlocks.length; i++) {
-      preCodeBlocks[i].classList.add("p-4", "my-4", "block");
+      preCodeBlocks[i].classList.add("p-1", "my-2", "block");
     }
     var codeBlocks = document.querySelectorAll("code");
     for (var i = 0; i < codeBlocks.length; i++) {
