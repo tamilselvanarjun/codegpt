@@ -1,7 +1,6 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { ChatGPTAPI } from "./chatgpt";
+import sidebarHTML from "./sidebar.html";
 
 // Command palette
 // This method is called when your extension is activated
@@ -54,7 +53,14 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this._extensionUri],
     };
 
-    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+    const scriptUri = webviewView.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "main.js")
+    );
+
+    webviewView.webview.html = sidebarHTML.replace(
+      "${scriptUri}",
+      scriptUri.toString()
+    );
 
     webviewView.webview.onDidReceiveMessage((data) => {
       if (data.type === "codeSelected") {
@@ -104,43 +110,6 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       this._view.show?.(true);
       this._view.webview.postMessage({ type: "addResponse", value: response });
     }
-  }
-
-  private _getHtmlForWebview(webview: vscode.Webview) {
-    const scriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "main.js")
-    );
-
-    return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<script src="  https://unpkg.com/showdown/dist/showdown.min.js"></script>
-				<script src="https://cdn.tailwindcss.com"></script>
-			</head>
-			<body>
-      <h1 class="mb-2">Quick shortcuts</h1>
-        <div class="flex gap-x-1 mb-2 flex-wrap gap-y-1">
-          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
-            id="explain-code-btn">Explain</button>
-          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
-            id="fix-bugs-btn">Fix bugs</button>
-          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
-            id="explain-error-btn">Explain error</button>
-        </div>
-        <h1 class="mb-2">Or type your question:</h1>
-				<input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" 
-          type="text" id="prompt-input" />
-        <div class="flex gap-x-1 mt-2 justify-end">
-          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
-            id="submit-btn">Ask</button>
-        </div>
-				<div id="response" class="pt-4 text-lg">
-				</div>
-				<script src="${scriptUri}"></script>
-			</body>
-			</html>`;
   }
 }
 
