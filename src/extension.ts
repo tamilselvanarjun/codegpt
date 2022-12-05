@@ -128,14 +128,21 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 				<script src="https://cdn.tailwindcss.com"></script>
 			</head>
 			<body>
-        <h1 class="mb-2">Type your question:</h1>
+      <h1 class="mb-2">Quick shortcuts</h1>
+        <div class="flex gap-x-1 mb-2 flex-wrap gap-y-1">
+          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
+            id="explain-code-btn">Explain</button>
+          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
+            id="fix-bugs-btn">Fix bugs</button>
+          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
+            id="explain-error-btn">Explain error</button>
+        </div>
+        <h1 class="mb-2">Or type your question:</h1>
 				<input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" 
           type="text" id="prompt-input" />
-        <div class="flex gap-x-1 mt-2">
+        <div class="flex gap-x-1 mt-2 justify-end">
           <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
-            id="explain-code-btn">Explain code</button>
-          <button class="bg-blue-800 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100" 
-            id="explain-code-btn">Fix bugs</button>
+            id="submit-btn">Ask</button>
         </div>
 				<div id="response" class="pt-4 text-lg">
 				</div>
