@@ -20,6 +20,7 @@
       }
       case "setLoading": {
         isLoading = message.value;
+        document.getElementById("response").classList.remove("hidden");
         if (isLoading) {
           document.getElementById("response-text").innerHTML = "";
           document.getElementById("loading-spinner").classList.remove("hidden");
@@ -76,17 +77,14 @@
 
   document
     .getElementById("prompt-input")
-    .addEventListener("keyup", function (e) {
+    .addEventListener("keypress", function (e) {
       const value = document.getElementById("prompt-input").innerText;
-      if (e.keyCode === 13) {
+      if (e.keyCode === 13 && !e.shiftKey) {
         vscode.postMessage({
           type: "prompt",
           value: value,
         });
-        // TODO: None of this works to prevent the Enter key from adding a newline
         e.preventDefault();
-        e.stopPropagation();
-        return false;
       }
     });
   document.getElementById("submit-btn").addEventListener("click", function () {

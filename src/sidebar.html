@@ -23,7 +23,7 @@
 
     <div class="flex gap-x-1 mt-2 justify-end">
       <button
-        class="bg-sky-900 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100"
+        class="bg-sky-900 rounded px-2 py-1 hover:bg-sky-700 text-sm text-gray-100"
         id="submit-btn"
       >
         Ask
@@ -33,26 +33,28 @@
     <h1 class="mb-2 uppercase text-xs tracking-tight">Quick shortcuts</h1>
     <div class="flex gap-x-1 mb-2 flex-wrap gap-y-1">
       <button
-        class="bg-sky-900 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100"
+        class="bg-sky-900 rounded px-2 py-1 hover:bg-sky-700 text-sm text-gray-100"
         id="explain-code-btn"
       >
         Explain
       </button>
       <button
-        class="bg-sky-900 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100"
+        class="bg-sky-900 rounded px-2 py-1 hover:bg-sky-700 text-sm text-gray-100"
         id="fix-bugs-btn"
       >
         Fix bugs
       </button>
       <button
-        class="bg-sky-900 rounded px-2 py-1 hover:bg-blue-900 text-sm text-gray-100"
+        class="bg-sky-900 rounded px-2 py-1 hover:bg-sky-700 text-sm text-gray-100"
         id="explain-error-btn"
       >
         Explain error
       </button>
     </div>
 
-    <div id="response" class="py-2 border-t border-sky-900 text-sm">
+    <div id="response" class="py-2 border-t border-sky-900 text-sm hidden">
+      <h1 class="mb-2 uppercase text-xs tracking-tight">RESPONSE</h1>
+
       <div id="loading-spinner" class="justify-center items-center hidden">
         <svg
           aria-hidden="true"

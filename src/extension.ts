@@ -36,7 +36,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
    * You can set this to "true" once you have authenticated within the headless chrome.
    */
   private _chatGPTAPI = new ChatGPTAPI({
-    headless: false,
+    headless: true,
   });
 
   constructor(private readonly _extensionUri: vscode.Uri) {}
