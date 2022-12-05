@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { ChatGPTAPI } from "./chatgpt";
 
+// Command palette
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -49,16 +50,13 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     this._view = webviewView;
 
     webviewView.webview.options = {
-      // Allow scripts in the webview
       enableScripts: true,
-
       localResourceRoots: [this._extensionUri],
     };
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
     webviewView.webview.onDidReceiveMessage((data) => {
-      // Check if the data type is "codeSelected"
       if (data.type === "codeSelected") {
         let code = data.value;
         code = code.replace(/([^\\])(\$)([^{0-9])/g, "$1\\$$$3");
@@ -66,14 +64,8 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         vscode.window.activeTextEditor?.insertSnippet(
           new vscode.SnippetString(code)
         );
-      }
-      // Check if the data type is "prompt"
-      else if (data.type === "prompt") {
+      } else if (data.type === "prompt") {
         this.search(data.value ?? "");
-      }
-      // If the data type does not match either of the above cases, handle it as "some other message"
-      else {
-        console.log("some other message");
       }
     });
   }
