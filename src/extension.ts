@@ -2,8 +2,57 @@ import * as vscode from "vscode";
 import { ChatGPTAPI } from "chatgpt";
 import sidebarHTML from "./sidebar.html";
 
-// const IS_HEADLESS = true;
-const IS_HEADLESS = false;
+// Test this
+// undefined > undefined
+// "" > undefined
+// "a" > "a"
+function undefinedIfEmpty(str: string | undefined) {
+  return (str ?? "").length > 0 ? str : undefined;
+}
+
+function createPrompt(
+  userInput?: string,
+  preset?: string,
+  currentSelection?: string,
+  currentBuffer?: string
+): string {
+  if (preset) {
+    return preset + "\n" + (userInput ?? currentSelection ?? currentBuffer ?? "");
+  }
+  // If preset is not set, return selection + userInput or just user input if no selection
+  else {
+    // (textarea can be empty - like for an error message)
+    if (currentSelection) {
+      return `${currentSelection}
+
+    ${userInput}`;
+    } else {
+      // We don't allow current file because otherwise, there would be no way to do just
+      // do prompts directly like "Generate a discord bot that tells funny jokes"
+      // TODO: Check out OG demo to see what they do
+      return userInput ?? "";
+    }
+  }
+  return "";
+}
+
+function runTests() {
+  // console.log("start tests....");
+  // const presetNoInputActual = createPrompt(undefined, "explain this code: ", "main()");
+  // const presetNoInputExpect = "explain this code: \nmain()";
+  // console.log("actual", presetNoInputActual, "expected", presetNoInputExpect);
+  // console.log(presetNoInputActual === presetNoInputExpect);
+  // const presetNoInputNoSelectionActual = createPrompt(undefined, "explain this code: ");
+  // const presetNoInputNoSelection = "explain this code: \n";
+  // console.log("actual", presetNoInputNoSelectionActual, "expected", presetNoInputNoSelection);
+  // console.log(presetNoInputNoSelectionActual === presetNoInputNoSelection);
+  // prompt = "Explain this code:", currentBuffer = "long file"
+  // output = "Explain this code: long file"
+  // userInput = "how do you create a new class in Javascript"?
+  // output = same
+  // userInput = "change const to let", selection = "const a = 5;"
+  // output = "const a = 5;\nchange const to let"
+}
 
 // Command palette
 // This method is called when your extension is activated
@@ -34,10 +83,12 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
    * You can set this to "true" once you have authenticated within the headless chrome.
    */
   private _chatGPTAPI = new ChatGPTAPI({
-    sessionToken: SESSION_TOKEN, // process.env.SESSION_TOKEN || "",
+    sessionToken: vscode.workspace.getConfiguration("chatgpt").get("token") ?? "", // SESSION_TOKEN, // process.env.SESSION_TOKEN || "",
   });
 
-  constructor(private readonly _extensionUri: vscode.Uri) {}
+  constructor(private readonly _extensionUri: vscode.Uri) {
+    runTests();
+  }
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -54,8 +105,26 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     const scriptUri = webviewView.webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "main.js")
     );
-
-    webviewView.webview.html = sidebarHTML.replace("${scriptUri}", scriptUri.toString());
+    webviewView.webview.html = sidebarHTML
+      .replace("${mainScriptUri}", scriptUri.toString())
+      .replace(
+        "${jqueryScriptUri}",
+        webviewView.webview
+          .asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "jquery.min.js"))
+          .toString()
+      )
+      .replace(
+        "${showdownUri}",
+        webviewView.webview
+          .asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "showdown.min.js"))
+          .toString()
+      )
+      .replace(
+        "${tailwindUri}",
+        webviewView.webview
+          .asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "tailwind.min.js"))
+          .toString()
+      );
 
     webviewView.webview.onDidReceiveMessage((data) => {
       if (data.type === "codeSelected") {
@@ -72,7 +141,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
           terminal.sendText(data.value);
         }
       } else if (data.type === "prompt") {
-        this.search(data.value ?? "");
+        this.search(data.value ?? "", data.presetPrompt ?? "");
       }
     });
 
@@ -87,7 +156,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     });
   }
 
-  public async search(prompt: string) {
+  public async search(userInput: string, preset?: string) {
     this._view?.webview.postMessage({
       type: "setLoading",
       value: true,
@@ -95,43 +164,37 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
     await this._chatGPTAPI.ensureAuth();
 
-    // Get the active document's text
-    const languageId = vscode.window.activeTextEditor?.document.languageId;
-    const surroundingText = vscode.window.activeTextEditor?.document.getText();
+    const activeEditor = vscode.window.activeTextEditor;
+    const languageId = activeEditor?.document.languageId;
+    const currentSelection = activeEditor?.document.getText(activeEditor?.selection);
+    const currentBuffer = activeEditor?.document.getText();
 
-    // get the selected text
-    const selection = vscode.window.activeTextEditor?.selection;
-    const selectedText = vscode.window.activeTextEditor?.document.getText(selection);
-    let searchPrompt = "";
+    const prompt = createPrompt(
+      undefinedIfEmpty(userInput),
+      undefinedIfEmpty(preset),
+      undefinedIfEmpty(currentSelection),
+      currentBuffer && currentBuffer.length > 0
+        ? `This is the ${languageId} file I'm working on:\n${currentBuffer}`
+        : undefined
+    );
 
-    if (selection && selectedText) {
-      searchPrompt = `${selectedText}
+    console.log("Prompt: ", prompt);
 
-	${prompt}`;
-    } else {
-      //     searchPrompt = `This is the ${languageId} file I'm working on:
-      // ${surroundingText}
-
-      // ${prompt}`;
-      searchPrompt = prompt;
-    }
-
-    console.log(searchPrompt);
-
-    let response = "";
     try {
-      response = await this._chatGPTAPI.sendMessage(searchPrompt);
+      const gptResponse = await this._chatGPTAPI.sendMessage(prompt);
+      if (this._view) {
+        this._view.show?.(true);
+        this._view?.webview.postMessage({
+          type: "setLoading",
+          value: false,
+        });
+
+        console.log("Response: ", gptResponse);
+
+        this._view.webview.postMessage({ type: "addResponse", value: gptResponse });
+      }
     } catch (e) {
       console.error(e);
-    }
-
-    if (this._view) {
-      this._view.show?.(true);
-      this._view?.webview.postMessage({
-        type: "setLoading",
-        value: false,
-      });
-      this._view.webview.postMessage({ type: "addResponse", value: response });
     }
   }
 }

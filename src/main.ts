@@ -1,5 +1,6 @@
 // This script will be run within the webview itself
 // It cannot access the main VS Code APIs directly.
+
 (function () {
   const vscode = acquireVsCodeApi();
 
@@ -43,11 +44,8 @@
   function setResponse() {
     var converter = new showdown.Converter();
     html = converter.makeHtml(response);
-
-    document.getElementById("response-text").innerHTML = html;
-
-    // document.getElementById("response-text").innerHTML =
-    // "<div>someting <pre><code>document.innerHTML</code></pre> <code>test()</code> long and winding here</div>";
+    document.getElementById("response-text").innerHTML =
+      "<div>someting <pre><code>document.innerHTML</code></pre> <code>test()</code> long and winding here</div>";
 
     // pre code is a block
     var preCodeBlocks = document.querySelectorAll("pre code");
@@ -66,10 +64,10 @@
       $(preCodeBlocks[i]).appendChild(
         $(
           ```<div class='flex justify-end'>
-          <button>copy</button>
-          <button>insert</button>
-          <button>execute in terminal</button>
-        </div>```
+            <button>copy</button>
+            <button>insert</button>
+            <button>execute in terminal</button>
+          </div>```
         )
       );
     }
@@ -117,7 +115,7 @@
       type: "prompt",
       value: value,
     });
-    // setResponse();
+    setResponse();
   });
 
   const elementIds = ["explain-code-btn", "explain-error-btn", "fix-bugs-btn"];

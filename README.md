@@ -4,6 +4,8 @@ This is very much an alpha. The error handling needs to be significantly improve
 
 VSCode extension that allows you to use ChatGPT right within VSCode. The goal is to make the interaction with the AI seamless and boost your programming productivity significantly.
 
+Forked from [TODO]. His demo is here, and its great.
+
 ## Demo
 
 Here, we code a Discord bot iteratively mostly using ChatGPT.
