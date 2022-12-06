@@ -22,6 +22,7 @@ Here, we code a Discord bot iteratively mostly using ChatGPT.
 - Support for large responses that span multiple messages (using the "continue" prompt trick)
 - Workspace detection (tell GPT that you use Yarn, Tailwind, etc. so it generates the most relevant code snippets)
 - Full history
+- Refactor code and see diff
 
 ## Configuration
 
