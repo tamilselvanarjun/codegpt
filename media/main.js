@@ -49,10 +49,7 @@
     for (var i = 0; i < codeBlocks.length; i++) {
       // Check if innertext starts with "Copy code"
       if (codeBlocks[i].innerText.startsWith("Copy code")) {
-        codeBlocks[i].innerText = codeBlocks[i].innerText.replace(
-          "Copy code",
-          ""
-        );
+        codeBlocks[i].innerText = codeBlocks[i].innerText.replace("Copy code", "");
       }
 
       codeBlocks[i].classList.add(
@@ -75,20 +72,18 @@
     }
   }
 
-  document
-    .getElementById("prompt-input")
-    .addEventListener("keypress", function (e) {
-      const value = document.getElementById("prompt-input").innerText;
-      if (e.keyCode === 13 && !e.shiftKey) {
-        vscode.postMessage({
-          type: "prompt",
-          value: value,
-        });
-        e.preventDefault();
-      }
-    });
+  document.getElementById("prompt-input").addEventListener("keypress", function (e) {
+    const value = document.getElementById("prompt-input").value;
+    if (e.keyCode === 13 && !e.shiftKey) {
+      vscode.postMessage({
+        type: "prompt",
+        value: value,
+      });
+      e.preventDefault();
+    }
+  });
   document.getElementById("submit-btn").addEventListener("click", function () {
-    const value = document.getElementById("prompt-input").innerText;
+    const value = document.getElementById("prompt-input").value;
     vscode.postMessage({
       type: "prompt",
       value: value,
