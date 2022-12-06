@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { ChatGPTAPI } from "./chatgpt";
+import { ChatGPTAPI } from "chatgpt";
 import sidebarHTML from "./sidebar.html";
 
 // const IS_HEADLESS = true;
@@ -14,18 +14,13 @@ export function activate(context: vscode.ExtensionContext) {
   const provider = new ChatGPTViewProvider(context.extensionUri);
 
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      ChatGPTViewProvider.viewType,
-      provider
-    )
+    vscode.window.registerWebviewViewProvider(ChatGPTViewProvider.viewType, provider)
   );
 
   let disposable2 = vscode.commands.registerCommand("chatgpt.ask", () => {
-    vscode.window
-      .showInputBox({ prompt: "What do you want to do?" })
-      .then((value) => {
-        provider.search(value ?? "");
-      });
+    vscode.window.showInputBox({ prompt: "What do you want to do?" }).then((value) => {
+      provider.search(value ?? "");
+    });
   });
   context.subscriptions.push(disposable2);
 }
@@ -39,7 +34,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
    * You can set this to "true" once you have authenticated within the headless chrome.
    */
   private _chatGPTAPI = new ChatGPTAPI({
-    headless: IS_HEADLESS,
+    sessionToken: SESSION_TOKEN, // process.env.SESSION_TOKEN || "",
   });
 
   constructor(private readonly _extensionUri: vscode.Uri) {}
@@ -60,19 +55,14 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, "media", "main.js")
     );
 
-    webviewView.webview.html = sidebarHTML.replace(
-      "${scriptUri}",
-      scriptUri.toString()
-    );
+    webviewView.webview.html = sidebarHTML.replace("${scriptUri}", scriptUri.toString());
 
     webviewView.webview.onDidReceiveMessage((data) => {
       if (data.type === "codeSelected") {
         let code = data.value;
         code = code.replace(/([^\\])(\$)([^{0-9])/g, "$1\\$$$3");
 
-        vscode.window.activeTextEditor?.insertSnippet(
-          new vscode.SnippetString(code)
-        );
+        vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(code));
       } else if (data.type === "sendToTerminal") {
         // Send text to the active terminal
         // const terminal = vscode.window.activeTerminal;
@@ -89,8 +79,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     // Listen to current selection and send it to main.js
     vscode.window.onDidChangeTextEditorSelection((event) => {
       const selection = event.selections[0];
-      const selectionText =
-        vscode.window.activeTextEditor?.document.getText(selection);
+      const selectionText = vscode.window.activeTextEditor?.document.getText(selection);
       webviewView.webview.postMessage({
         type: "updateSelection",
         value: selectionText,
@@ -104,10 +93,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       value: true,
     });
 
-    const isSignedIn = await this._chatGPTAPI.getIsSignedIn();
-    if (!isSignedIn) {
-      await this._chatGPTAPI.init();
-    }
+    await this._chatGPTAPI.ensureAuth();
 
     // Get the active document's text
     const languageId = vscode.window.activeTextEditor?.document.languageId;
@@ -115,8 +101,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
     // get the selected text
     const selection = vscode.window.activeTextEditor?.selection;
-    const selectedText =
-      vscode.window.activeTextEditor?.document.getText(selection);
+    const selectedText = vscode.window.activeTextEditor?.document.getText(selection);
     let searchPrompt = "";
 
     if (selection && selectedText) {
@@ -133,7 +118,12 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
     console.log(searchPrompt);
 
-    const response = await this._chatGPTAPI.sendMessage(searchPrompt);
+    let response = "";
+    try {
+      response = await this._chatGPTAPI.sendMessage(searchPrompt);
+    } catch (e) {
+      console.error(e);
+    }
 
     if (this._view) {
       this._view.show?.(true);
