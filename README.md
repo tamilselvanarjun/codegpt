@@ -1,14 +1,47 @@
-# ChatGPT for VSCode
+# ChatGPT for VSCode (ALPHA)
 
-This is a VSCode extension that allows you to use ChatGPT right within VSCode.
+This is very much an alpha. The error handling needs to be significantly improved.
 
-**Warning:** Right now, this is more of a proof of concept!
+VSCode extension that allows you to use ChatGPT right within VSCode. The goal is to make the interaction with the AI seamless and boost your programming productivity significantly.
+
+## Demo
+
+Here, we code a Discord bot iteratively mostly using ChatGPT.
+
+## Features
+
+- Send generated code directly to text or terminal buffers
+- Comes with useful prompt presets:
+  - Explain code
+  - Diagnose error message
+  - Identify bugs
+- Feed your current selection or active tab into the prompt
+
+### Planned (please submit PRs)
+
+- Support for large responses that span multiple messages (using the "continue" prompt trick)
+- Workspace detection (tell GPT that you use Yarn, Tailwind, etc. so it generates the most relevant code snippets)
+- Full history
+
+## Configuration
+
+Copy your access token from your ChatGPT browser tab like so:
+
+1. Go to https://chat.openai.com/chat and log in or sign up.
+1. Open browser Dev Tools (cmd + opt + c on Mac/Chrome).
+1. Open Application > Cookies.
+1. Copy the value for \_\_Secure-next-auth.session-token
+1. \*\*Open VSCode settings
+1. Search for ChatGPT token and paste it in there
+
+[session-token.png]
 
 ## How it works
 
-The extension makes use of this [ChatGPT package](https://github.com/transitive-bullshit/chatgpt-api), which uses Playwright/a headless chrome in order to login and communicate with ChatGPT.
+We use the unofficial API endpoints that power the ChatGPT website. Thanks to transitive bullshit for the [ChatGPT package](https://github.com/transitive-bullshit/chatgpt-api).
 
-In order to use this with VSCode, it's best to run the extension in debug mode once.
-On the initial start, you will need to authenticate with OpenAI - this requires you to login via the headless Chrome.
+While this approach is more robust than earlier UI automation approaches, the endpoints are subject to change as well as rate limits. They might break at any point.
 
-When you are successfully authenticated, you can turn on headless mode so that the browser won't be visible.
+## License
+
+MIT
