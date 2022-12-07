@@ -21,6 +21,16 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "ChatGPT Assistant",
+      "properties": {
+        "chatgpt.token": {
+          "type": "string",
+          "default": "",
+          "description": "Session token for ChatGPT"
+        }
+      }
+    },
     "commands": [
       {
         "command": "chatgpt.ask",

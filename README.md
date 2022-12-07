@@ -32,7 +32,7 @@ Add your access token from your ChatGPT browser tab like so:
 1. Go to [ChatGPT](https://chat.openai.com/chat) and log in or sign up.
 1. Open browser Dev Tools (cmd + opt + c on Mac/Chrome).
 1. Open Application > Cookies.
-1. Copy the value for \_\_Secure-next-auth.session-token
+1. Copy the value for \_\_Secure-next-auth.session-token.0
 1. In VS Code, Cmd+Shift+P and search for "Preferences: Open User Settings (JSON)"
 1. Add the chatGPT token by adding a new top-level propertly: `"chatgpt": {"token": "TOKEN GOES HERE"}"`
 

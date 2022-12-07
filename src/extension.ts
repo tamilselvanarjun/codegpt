@@ -60,7 +60,7 @@ function runTests() {
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
-  const provider = new ChatGPTViewProvider(context.extensionUri);
+  const provider = new ChatGPTViewProvider(context);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(ChatGPTViewProvider.viewType, provider)
@@ -79,60 +79,43 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
   private _view?: vscode.WebviewView;
 
-  /**
-   * You can set this to "true" once you have authenticated within the headless chrome.
-   */
-  private _chatGPTAPI: ChatGPTAPI | null = null;
-
   private conversation: ChatGPTConversation | null = null;
 
-  constructor(private readonly _extensionUri: vscode.Uri) {
-    runTests();
-  }
+  constructor(private context: vscode.ExtensionContext) {}
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
     context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
-    if (!this._chatGPTAPI) {
-      try {
-        this._chatGPTAPI = new ChatGPTAPI({
-          sessionToken: vscode.workspace.getConfiguration("chatgpt").get("token") ?? "", // SESSION_TOKEN, // process.env.SESSION_TOKEN || "",
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
     this._view = webviewView;
 
     webviewView.webview.options = {
       enableScripts: true,
-      localResourceRoots: [this._extensionUri],
+      localResourceRoots: [this.context.extensionUri],
     };
 
     const scriptUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "main.js")
+      vscode.Uri.joinPath(this.context.extensionUri, "media", "main.js")
     );
     webviewView.webview.html = sidebarHTML
       .replace("${mainScriptUri}", scriptUri.toString())
       .replace(
         "${jqueryScriptUri}",
         webviewView.webview
-          .asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "jquery.min.js"))
+          .asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, "media", "jquery.min.js"))
           .toString()
       )
       .replace(
         "${showdownUri}",
         webviewView.webview
-          .asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "showdown.min.js"))
+          .asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, "media", "showdown.min.js"))
           .toString()
       )
       .replace(
         "${tailwindUri}",
         webviewView.webview
-          .asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "tailwind.min.js"))
+          .asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, "media", "tailwind.min.js"))
           .toString()
       );
 
@@ -166,6 +149,30 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
   }
 
   public async search(userInput: string, preset?: string) {
+    let sessionToken = vscode.workspace.getConfiguration("chatgpt").get("token") as
+      | string
+      | null
+      | undefined;
+
+    // Prompt for session token if one is not set.
+    if (!sessionToken || sessionToken.length === 0) {
+      const value = await vscode.window.showInputBox({
+        title: "Add your Session Token",
+        prompt:
+          "Please grab your token and paste it here. See the Marketplace extension page for instructions.",
+      });
+      if (!value) {
+        return;
+      }
+
+      await vscode.workspace.getConfiguration("chatgpt").update("token", value, true);
+      sessionToken = value;
+    }
+
+    const api = new ChatGPTAPI({
+      sessionToken: sessionToken ?? "",
+    });
+
     this._view?.webview.postMessage({
       type: "setLoading",
       value: true,
@@ -188,11 +195,11 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     console.log("Prompt: ", prompt);
 
     try {
-      await this._chatGPTAPI?.ensureAuth();
+      await api.ensureAuth();
 
       // Start a convo if it doesn't exist
       if (!this.conversation) {
-        this.conversation = this._chatGPTAPI?.getConversation() ?? null;
+        this.conversation = api.getConversation() ?? null;
       }
 
       const gptResponse = await this.conversation?.sendMessage(prompt);
@@ -206,11 +213,27 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       }
       console.log("Response: ", gptResponse);
     } catch (e: any) {
+      const errorMsg: string = e?.message;
       this._view?.webview.postMessage({
         type: "setLoading",
         value: false,
       });
-      await vscode.window.showErrorMessage("Error sending request to ChatGPT", e?.message);
+
+      if (
+        errorMsg.includes("session token may have expired") ||
+        errorMsg.includes("ChatGPT failed to refresh auth token")
+      ) {
+        const value = await vscode.window.showInputBox({
+          title: "Expired Session Token",
+          prompt: "Please enter a new token. See the Marketplace extension page for instructions.",
+        });
+        if (!value) {
+          return;
+        }
+        await vscode.workspace.getConfiguration("chatgpt").update("token", value, true);
+      } else {
+        await vscode.window.showErrorMessage("Error sending request to ChatGPT", e?.message);
+      }
       console.error(e);
     }
   }
