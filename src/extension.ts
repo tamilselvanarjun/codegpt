@@ -130,7 +130,6 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       if (data.type === "codeSelected") {
         let code = data.value;
         code = code.replace(/([^\\])(\$)([^{0-9])/g, "$1\\$$$3");
-
         vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(code));
       } else if (data.type === "feedTerminal") {
         // Send text to the active terminal
@@ -139,7 +138,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
           terminal.sendText(data.value);
         }
       } else if (data.type === "copy") {
-        // TODO: Fill in
+        vscode.env.clipboard.writeText(data.value);
       } else if (data.type === "prompt") {
         this.search(data.value ?? "", data.presetPrompt ?? "");
       }
