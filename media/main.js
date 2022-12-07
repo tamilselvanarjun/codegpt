@@ -3,15 +3,12 @@
 (function () {
   const vscode = acquireVsCodeApi();
 
-  let response = "";
-
   // Handle messages sent from the extension to the webview
   window.addEventListener("message", (event) => {
     const message = event.data;
     switch (message.type) {
       case "addResponse": {
-        response = message.value;
-        setResponse();
+        setResponse(message.value);
         break;
       }
       case "clearResponse": {
@@ -41,7 +38,7 @@
     return document.getElementById("prompt-input").value.trim();
   }
 
-  function setResponse() {
+  function setResponse(response) {
     var converter = new showdown.Converter();
     document.getElementById("response-text").innerHTML = converter.makeHtml(response);
 
