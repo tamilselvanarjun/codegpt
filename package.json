@@ -1,10 +1,16 @@
 {
-  "name": "chatgpt",
-  "displayName": "chatgpt",
-  "description": "",
-  "version": "0.0.1",
+  "name": "chatgpt-assistant",
+  "displayName": "ChatGPT Assistant: Boost your coding",
+  "description": "A VSCode extension that makes interacting with the AI seamless",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.73.0"
+  },
+  "publisher": "abiraja",
+  "icon": "logo.png",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/abi/chatgpt-vscode"
   },
   "categories": [
     "Other"
