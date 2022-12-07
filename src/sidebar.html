@@ -63,14 +63,15 @@
 
     <div class="grow-wrap">
       <textarea
-        class="bg-stone-700 w-full text-sm focus-visible:outline-none"
+        class="bg-stone-700 w-full text-sm focus-visible:outline-none rounded-sm"
         name="prompt-input"
         id="prompt-input"
         onInput="this.parentNode.dataset.replicatedValue = this.value"
+        rows="1"
       ></textarea>
     </div>
 
-    <div class="flex gap-x-1 mt-2 justify-end">
+    <div class="flex gap-x-1 mt-3 justify-end">
       <button
         class="bg-sky-900/20 rounded px-2 py-1 hover:bg-sky-900 hover:text-gray-100 text-sm text-gray-400 truncate"
         id="explain-code-btn"
