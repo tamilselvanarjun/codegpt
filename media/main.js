@@ -43,6 +43,7 @@
 
   function setResponse() {
     var converter = new showdown.Converter();
+    document.getElementById("response-text").innerHTML = converter.makeHtml(response);
 
     // DEBUG
     // html = converter.makeHtml(
@@ -71,8 +72,6 @@
 
     // I hope this helps! Let me know if you have any other questions.`
     // );
-
-    // document.getElementById("response-text").innerHTML = html;
 
     var preCodeBlocks = document.querySelectorAll("pre code");
     for (var i = 0; i < preCodeBlocks.length; i++) {

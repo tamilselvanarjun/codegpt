@@ -162,8 +162,6 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       value: true,
     });
 
-    await this._chatGPTAPI.ensureAuth();
-
     const activeEditor = vscode.window.activeTextEditor;
     const languageId = activeEditor?.document.languageId;
     const currentSelection = activeEditor?.document.getText(activeEditor?.selection);
@@ -181,6 +179,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     console.log("Prompt: ", prompt);
 
     try {
+      await this._chatGPTAPI.ensureAuth();
       const gptResponse = await this._chatGPTAPI.sendMessage(prompt);
       if (this._view) {
         this._view.show?.(true);
@@ -188,12 +187,11 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
           type: "setLoading",
           value: false,
         });
-
-        console.log("Response: ", gptResponse);
-
         this._view.webview.postMessage({ type: "addResponse", value: gptResponse });
       }
-    } catch (e) {
+      console.log("Response: ", gptResponse);
+    } catch (e: any) {
+      await vscode.window.showErrorMessage("Error sending request to ChatGPT", e?.message);
       console.error(e);
     }
   }
