@@ -22,6 +22,7 @@
         isLoading = message.value;
         document.getElementById("response").classList.remove("hidden");
         if (isLoading) {
+          // DEBUG
           document.getElementById("response-text").innerHTML = "";
           document.getElementById("loading-spinner").classList.remove("hidden");
           document.getElementById("loading-spinner").classList.add("flex");
@@ -42,37 +43,96 @@
 
   function setResponse() {
     var converter = new showdown.Converter();
-    html = converter.makeHtml(response);
 
-    document.getElementById("response-text").innerHTML = html;
+    // DEBUG
+    // html = converter.makeHtml(
+    //   `Sure, here's a simple Discord bot written in Python using the \`discord.py\` library:` +
+    //     "\n```\n" +
+    //     `
+    // import discord
 
-    // document.getElementById("response-text").innerHTML =
-    // "<div>someting <pre><code>document.innerHTML</code></pre> <code>test()</code> long and winding here</div>";
+    // client = discord.Client()
 
-    // pre code is a block
+    // @client.event
+    // async def on_message(message):
+    //     if message.author == client.user:
+    //         return
+
+    //     if message.content.startswith('!hello'):
+    //         await message.channel.send('Hello!')
+
+    // client.run('your-bot-token-here')` +
+    //     "\n```\n\n" +
+    //     `
+
+    // To use this bot, you'll need to create a new bot on the Discord developer portal and obtain a bot token. Then, replace \`'your-bot-token-here'\` with your bot's token and run the script.
+
+    // The bot will respond to any message that starts with \`!hello\` by sending the message \`Hello!\` back to the channel. You can customize the bot's behavior by modifying the \`on_message()\` event handler.
+
+    // I hope this helps! Let me know if you have any other questions.`
+    // );
+
+    // document.getElementById("response-text").innerHTML = html;
+
     var preCodeBlocks = document.querySelectorAll("pre code");
     for (var i = 0; i < preCodeBlocks.length; i++) {
-      preCodeBlocks[i].classList.add(
-        "p-1",
-        "my-2",
-        "block",
-        "w-full",
-        "rounded-sm",
-        "border",
-        "border-sky-900",
-        "font-mono"
-      );
+      $(preCodeBlocks[i]).parent().addClass("pt-2 rounded-sm");
+      $(preCodeBlocks[i]).addClass("p-1 block w-full rounded-sm font-mono");
 
-      $(preCodeBlocks[i]).appendChild(
-        $(
-          ```<div class='flex justify-end'>
-          <button>copy</button>
-          <button>insert</button>
-          <button>execute in terminal</button>
-        </div>```
-        )
+      const codeContents = $(preCodeBlocks[i]).text();
+
+      // Top bar
+      const insertBtn = $(
+        `<button class="hover:cursor-pointer flex items-center gap-x-[3px]">
+          <i data-feather="plus-square" class="w-3 h-3"></i>insert</button>`
       );
+      insertBtn.click(function (e) {
+        e.preventDefault();
+        vscode.postMessage({
+          type: "codeSelected",
+          value: codeContents,
+        });
+      });
+
+      const terminalBtn = $(
+        '<button class="hover:cursor-pointer flex items-center gap-x-[3px]"><i data-feather="play" class="w-3 h-3"></i>execute in terminal</button>      '
+      );
+      terminalBtn.click(function (e) {
+        e.preventDefault();
+        vscode.postMessage({
+          type: "feedTerminal",
+          value: codeContents,
+        });
+      });
+
+      const copyBtn = $(
+        '<button class="hover:cursor-pointer flex items-center gap-x-[3px]"><i data-feather="clipboard" class="w-3 h-3"></i>copy</button>'
+      );
+      copyBtn.click(function (e) {
+        e.preventDefault();
+        vscode.postMessage({
+          type: "copy",
+          value: codeContents,
+        });
+      });
+
+      $(preCodeBlocks[i])
+        .parent()
+        .prepend(
+          $(
+            `<div class='flex items-center justify-end font-sans gap-x-3 px-2 py-1 text-[0.7em] text-gray-400 bg-gray-800'></div>`
+          )
+            .append(insertBtn)
+            .append(terminalBtn)
+            .append(copyBtn)
+        );
     }
+
+    // Highlight things
+    hljs.highlightAll();
+
+    // Set up all feather icons
+    feather.replace();
 
     // just <code> is inline
     var codeBlocks = document.querySelectorAll("code");
@@ -117,6 +177,7 @@
       type: "prompt",
       value: value,
     });
+    // DEBUG
     // setResponse();
   });
 
