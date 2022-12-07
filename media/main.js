@@ -75,7 +75,7 @@
 
     var preCodeBlocks = document.querySelectorAll("pre code");
     for (var i = 0; i < preCodeBlocks.length; i++) {
-      $(preCodeBlocks[i]).parent().addClass("pt-2 rounded-sm");
+      $(preCodeBlocks[i]).parent().addClass("pt-2 rounded-sm my-2");
       $(preCodeBlocks[i]).addClass("p-1 block w-full rounded-sm font-mono");
 
       const codeContents = $(preCodeBlocks[i]).text();
@@ -142,7 +142,7 @@
       }
 
       codeBlocks[i].classList.add(
-        "p-1",
+        "!whitespace-pre-wrap",
         "inline-flex",
         "max-w-full",
         "overflow-hidden",
