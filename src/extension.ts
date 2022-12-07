@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { ChatGPTAPI } from "chatgpt";
+import { ChatGPTAPI, ChatGPTConversation } from "chatgpt";
 import sidebarHTML from "./sidebar.html";
 
 // Test this
@@ -82,9 +82,9 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
   /**
    * You can set this to "true" once you have authenticated within the headless chrome.
    */
-  private _chatGPTAPI = new ChatGPTAPI({
-    sessionToken: vscode.workspace.getConfiguration("chatgpt").get("token") ?? "", // SESSION_TOKEN, // process.env.SESSION_TOKEN || "",
-  });
+  private _chatGPTAPI: ChatGPTAPI | null = null;
+
+  private conversation: ChatGPTConversation | null = null;
 
   constructor(private readonly _extensionUri: vscode.Uri) {
     runTests();
@@ -95,6 +95,16 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
+    if (!this._chatGPTAPI) {
+      try {
+        this._chatGPTAPI = new ChatGPTAPI({
+          sessionToken: vscode.workspace.getConfiguration("chatgpt").get("token") ?? "", // SESSION_TOKEN, // process.env.SESSION_TOKEN || "",
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     this._view = webviewView;
 
     webviewView.webview.options = {
@@ -178,8 +188,14 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     console.log("Prompt: ", prompt);
 
     try {
-      await this._chatGPTAPI.ensureAuth();
-      const gptResponse = await this._chatGPTAPI.sendMessage(prompt);
+      await this._chatGPTAPI?.ensureAuth();
+
+      // Start a convo if it doesn't exist
+      if (!this.conversation) {
+        this.conversation = this._chatGPTAPI?.getConversation() ?? null;
+      }
+
+      const gptResponse = await this.conversation?.sendMessage(prompt);
       if (this._view) {
         this._view.show?.(true);
         this._view?.webview.postMessage({
@@ -190,6 +206,10 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       }
       console.log("Response: ", gptResponse);
     } catch (e: any) {
+      this._view?.webview.postMessage({
+        type: "setLoading",
+        value: false,
+      });
       await vscode.window.showErrorMessage("Error sending request to ChatGPT", e?.message);
       console.error(e);
     }
