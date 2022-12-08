@@ -27,6 +27,7 @@ Here, we code a Discord bot iteratively mostly using ChatGPT.
 
 ## Features
 
+- Streaming, fast responses from ChatGPT
 - Send generated code directly to text or terminal buffers
 - Comes with useful prompt presets:
   - Explain code
