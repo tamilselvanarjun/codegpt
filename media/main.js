@@ -79,8 +79,8 @@
 
       // Top bar
       const insertBtn = $(
-        `<button class="hover:cursor-pointer flex items-center gap-x-[3px]">
-          <i data-feather="plus-square" class="w-3 h-3"></i>insert</button>`
+        `<button class="hover:cursor-pointer flex items-center">
+          <i data-feather="plus" class="w-3 h-3 mr-1"></i>insert</button>`
       );
       insertBtn.click(function (e) {
         e.preventDefault();
@@ -91,7 +91,8 @@
       });
 
       const terminalBtn = $(
-        '<button class="hover:cursor-pointer flex items-center gap-x-[3px]"><i data-feather="play" class="w-3 h-3"></i>execute in terminal</button>      '
+        `<button class="hover:cursor-pointer flex items-center">
+          <i data-feather="play" class="w-3 h-3 mr-[2px]"></i>execute in terminal</button>`
       );
       terminalBtn.click(function (e) {
         e.preventDefault();
@@ -102,7 +103,8 @@
       });
 
       const copyBtn = $(
-        '<button class="hover:cursor-pointer flex items-center gap-x-[3px]"><i data-feather="clipboard" class="w-3 h-3"></i>copy</button>'
+        `<button class="hover:cursor-pointer flex items-center">
+          <i data-feather="clipboard" class="w-3 h-3 mr-[2px]"></i>copy</button>`
       );
       copyBtn.click(function (e) {
         e.preventDefault();
@@ -116,7 +118,7 @@
         .parent()
         .prepend(
           $(
-            `<div class='flex items-center justify-end font-sans gap-x-3 px-2 py-1 text-[0.7em] text-gray-400 bg-gray-800'></div>`
+            `<div class='flex items-center justify-end font-sans gap-x-3 px-2 py-1 text-[0.85em] text-gray-400 bg-gray-800'></div>`
           )
             .append(insertBtn)
             .append(terminalBtn)

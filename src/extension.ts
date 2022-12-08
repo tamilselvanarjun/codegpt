@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { ChatGPTAPI, ChatGPTConversation } from "chatgpt";
 import sidebarHTML from "./sidebar.html";
+import { debounce } from "ts-debounce";
 
 // Test this
 // undefined > undefined
@@ -202,11 +203,11 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       }
 
       const gptResponse = await this.conversation?.sendMessage(prompt, {
-        onProgress: (partialResponse) => {
+        onProgress: debounce((partialResponse) => {
           if (this._view && this._view.visible) {
             this._view.webview.postMessage({ type: "addResponse", value: partialResponse });
           }
-        },
+        }, 20),
       });
 
       if (this._view) {

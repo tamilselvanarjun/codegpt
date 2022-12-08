@@ -87,6 +87,7 @@
     "chatgpt": "^2.0.1",
     "html-loader": "^4.2.0",
     "html-to-md": "npm:@fisch0920/html-to-md@^0.8.1",
-    "playwright": "^1.28.1"
+    "playwright": "^1.28.1",
+    "ts-debounce": "^4.0.0"
   }
 }
