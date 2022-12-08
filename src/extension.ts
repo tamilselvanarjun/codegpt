@@ -203,11 +203,16 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
       }
 
       const gptResponse = await this.conversation?.sendMessage(prompt, {
-        onProgress: debounce((partialResponse) => {
+        onProgress: (partialResponse) => {
           if (this._view && this._view.visible) {
             this._view.webview.postMessage({ type: "addResponse", value: partialResponse });
           }
-        }, 20),
+        },
+        // onProgress: debounce((partialResponse) => {
+        //   if (this._view && this._view.visible) {
+        //     this._view.webview.postMessage({ type: "addResponse", value: partialResponse });
+        //   }
+        // }, 5),
       });
 
       if (this._view) {

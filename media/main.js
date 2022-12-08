@@ -3,6 +3,12 @@
 (function () {
   const vscode = acquireVsCodeApi();
 
+  function hasUnclosedBlockCodeTag(str) {
+    const count = str.match(/```/g).length;
+    // If the number of backtick blocks is odd, there's an unclosed code tag
+    return count % 2 === 1;
+  }
+
   // Handle messages sent from the extension to the webview
   window.addEventListener("message", (event) => {
     const message = event.data;
@@ -40,7 +46,10 @@
 
   function setResponse(response) {
     var converter = new showdown.Converter();
-    document.getElementById("response-text").innerHTML = converter.makeHtml(response);
+    // Close unclosed code tags if needed
+    document.getElementById("response-text").innerHTML = converter.makeHtml(
+      hasUnclosedBlockCodeTag(response ?? "") ? response + "\n```" : response
+    );
 
     // DEBUG
     // html = converter.makeHtml(
