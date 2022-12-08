@@ -231,6 +231,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
           return;
         }
         await vscode.workspace.getConfiguration("chatgpt").update("token", value, true);
+        // TODO: Should re-try the query
       } else {
         await vscode.window.showErrorMessage("Error sending request to ChatGPT", e?.message);
       }

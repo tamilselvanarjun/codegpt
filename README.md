@@ -6,6 +6,21 @@ VSCode extension that allows you to use ChatGPT right within VSCode. The goal is
 
 Forked from [chatgpt-vscode](https://github.com/mpociot/chatgpt-vscode). Watch [his great demo here](https://twitter.com/marcelpociot/status/1599180144551526400).
 
+## Setup
+
+The first time you try to ask ChatGPT a question, you'll be asked for your session token. Here's how you get the session token:
+
+1. Go to [ChatGPT](https://chat.openai.com/chat) and log in or sign up.
+1. Open Dev Tools (Cmd + Opt + C on Mac/Chrome).
+1. Go to Application > Cookies
+1. Copy the value for \_\_Secure-next-auth.session-token
+
+![](demos/session-token.png)
+
+Periodically, the token might expire and you will be prompted for a new session token.
+
+You can also modify this session token at any time by editing `chatgpt.token` in settings.
+
 ## Demo
 
 Here, we code a Discord bot iteratively mostly using ChatGPT.
@@ -24,19 +39,6 @@ Here, we code a Discord bot iteratively mostly using ChatGPT.
 - Workspace detection (tell GPT that you use Yarn, Tailwind, etc. so it generates the most relevant code snippets)
 - Full history
 - Refactor code and see diff
-
-## Configuration
-
-Add your access token from your ChatGPT browser tab like so:
-
-1. Go to [ChatGPT](https://chat.openai.com/chat) and log in or sign up.
-1. Open browser Dev Tools (cmd + opt + c on Mac/Chrome).
-1. Open Application > Cookies.
-1. Copy the value for \_\_Secure-next-auth.session-token.0
-1. In VS Code, Cmd+Shift+P and search for "Preferences: Open User Settings (JSON)"
-1. Add the chatGPT token by adding a new top-level propertly: `"chatgpt": {"token": "TOKEN GOES HERE"}"`
-
-![](demos/session-token.png)
 
 ## How it works
 
