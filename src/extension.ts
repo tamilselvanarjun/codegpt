@@ -91,7 +91,6 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.options = {
       enableScripts: true,
-      retainContextWhenHidden: true,
       localResourceRoots: [this.context.extensionUri],
     };
 
