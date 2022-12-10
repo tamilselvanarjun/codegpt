@@ -1,8 +1,8 @@
-# ChatGPT for VSCode (ALPHA)
+# CodeGPT (ALPHA)
 
 This is very much an alpha. The error handling needs to be significantly improved.
 
-VSCode extension that allows you to use ChatGPT right within VSCode. The goal is to make the interaction with the AI seamless and boost your programming productivity significantly.
+A VSCode extension that allows you to use ChatGPT right within VSCode. The goal is to make the interaction with the AI seamless and boost your programming productivity significantly.
 
 Forked from [chatgpt-vscode](https://github.com/mpociot/chatgpt-vscode). Watch [his great demo here](https://twitter.com/marcelpociot/status/1599180144551526400).
 
