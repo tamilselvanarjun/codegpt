@@ -8,7 +8,9 @@ Forked from [chatgpt-vscode](https://github.com/mpociot/chatgpt-vscode). Watch [
 
 ## Setup
 
-The first time you try to ask ChatGPT a question, you'll be asked for your session token. Here's how you get the session token:
+The first time you try to ask ChatGPT a question, you'll be asked for your session token.
+
+Here's how you get the session token:
 
 1. Go to [ChatGPT](https://chat.openai.com/chat) and log in or sign up.
 1. Open Dev Tools (Cmd + Opt + C on Mac/Chrome).
