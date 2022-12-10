@@ -2,9 +2,17 @@
 
 This is very much an alpha. The error handling needs to be significantly improved.
 
-A VSCode extension that allows you to use ChatGPT right within VSCode. The goal is to make the interaction with the AI seamless and boost your programming productivity significantly.
+An extension that allows you to use ChatGPT right within VSCode. 
 
-Forked from [chatgpt-vscode](https://github.com/mpociot/chatgpt-vscode). Watch [his great demo here](https://twitter.com/marcelpociot/status/1599180144551526400).
+The goal is to make interaction with the AI seamless via deep integration with VS Code.
+
+**Install via the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=AbiRaja.codegpt)**.
+
+## Demo
+
+Here, we code the popular game, [Wordle](https://www.nytimes.com/games/wordle/index.html), in 2 minutes.
+
+
 
 ## Setup
 
@@ -23,10 +31,6 @@ Periodically, the token might expire and you will be prompted for a new session 
 
 You can also modify this session token at any time by editing `chatgpt.token` in settings.
 
-## Demo
-
-Here, we code a Discord bot iteratively mostly using ChatGPT.
-
 ## Features
 
 - Streaming, fast responses from ChatGPT
@@ -44,6 +48,8 @@ Here, we code a Discord bot iteratively mostly using ChatGPT.
 - Refactor code and see diff
 
 ## How it works
+
+Forked from [chatgpt-vscode](https://github.com/mpociot/chatgpt-vscode).
 
 We use the unofficial API endpoints that power the ChatGPT website. Thanks to Travis Fischer for the [ChatGPT package](https://github.com/transitive-bullshit/chatgpt-api).
 
