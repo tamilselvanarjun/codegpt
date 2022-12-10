@@ -12,6 +12,7 @@ The goal is to make interaction with the AI seamless via deep integration with V
 
 Here, we code the popular game, [Wordle](https://www.nytimes.com/games/wordle/index.html), in 2 minutes.
 
+https://user-images.githubusercontent.com/23818/206836012-d394570a-854a-4fec-9e08-9f406a96451e.mp4
 
 
 ## Setup
