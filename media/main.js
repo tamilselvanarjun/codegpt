@@ -4,7 +4,7 @@
   const vscode = acquireVsCodeApi();
 
   function hasUnclosedBlockCodeTag(str) {
-    const count = str.match(/```/g).length;
+    const count = str.match(/```/g)?.length ?? 0;
     // If the number of backtick blocks is odd, there's an unclosed code tag
     return count % 2 === 1;
   }
@@ -25,7 +25,6 @@
         isLoading = message.value;
         document.getElementById("response").classList.remove("hidden");
         if (isLoading) {
-          // DEBUG
           document.getElementById("response-text").innerHTML = "";
           document.getElementById("loading-spinner").classList.remove("hidden");
           document.getElementById("loading-spinner").classList.add("flex");
@@ -50,34 +49,6 @@
     document.getElementById("response-text").innerHTML = converter.makeHtml(
       hasUnclosedBlockCodeTag(response ?? "") ? response + "\n```" : response
     );
-
-    // DEBUG
-    // html = converter.makeHtml(
-    //   `Sure, here's a simple Discord bot written in Python using the \`discord.py\` library:` +
-    //     "\n```\n" +
-    //     `
-    // import discord
-
-    // client = discord.Client()
-
-    // @client.event
-    // async def on_message(message):
-    //     if message.author == client.user:
-    //         return
-
-    //     if message.content.startswith('!hello'):
-    //         await message.channel.send('Hello!')
-
-    // client.run('your-bot-token-here')` +
-    //     "\n```\n\n" +
-    //     `
-
-    // To use this bot, you'll need to create a new bot on the Discord developer portal and obtain a bot token. Then, replace \`'your-bot-token-here'\` with your bot's token and run the script.
-
-    // The bot will respond to any message that starts with \`!hello\` by sending the message \`Hello!\` back to the channel. You can customize the bot's behavior by modifying the \`on_message()\` event handler.
-
-    // I hope this helps! Let me know if you have any other questions.`
-    // );
 
     var preCodeBlocks = document.querySelectorAll("pre code");
     for (var i = 0; i < preCodeBlocks.length; i++) {
