@@ -157,14 +157,6 @@
         "text-xs",
         "cursor-pointer"
       );
-
-      codeBlocks[i].addEventListener("click", function (e) {
-        e.preventDefault();
-        vscode.postMessage({
-          type: "codeSelected",
-          value: this.innerText,
-        });
-      });
     }
   }
 
