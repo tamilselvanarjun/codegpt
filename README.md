@@ -1,8 +1,10 @@
-# CodeGPT (ALPHA)
+# CodeGPT (CURRENTLY NOT WORKING)
+
+Update (Dec 14): OpenAI made the unofficial API for ChatGPT harder to access and I need to upgrade the the NPM module this extension uses to bypass the latest protections. Should be fixed by Dec 16. Check back then. - Abi
 
 This is very much an alpha. The error handling needs to be significantly improved.
 
-An extension that allows you to use ChatGPT right within VSCode. 
+An extension that allows you to use ChatGPT right within VSCode.
 
 The goal is to make interaction with the AI seamless via deep integration with VS Code.
 
@@ -13,7 +15,6 @@ The goal is to make interaction with the AI seamless via deep integration with V
 Here, we code the popular game, [Wordle](https://www.nytimes.com/games/wordle/index.html), in 2 minutes.
 
 https://user-images.githubusercontent.com/23818/206836012-d394570a-854a-4fec-9e08-9f406a96451e.mp4
-
 
 ## Setup
 
