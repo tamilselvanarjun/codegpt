@@ -2,7 +2,7 @@
   "name": "codegpt",
   "displayName": "CodeGPT: Boost your coding with ChatGPT",
   "description": "A VSCode extension that makes interacting with the AI seamless",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.73.0"
   },
