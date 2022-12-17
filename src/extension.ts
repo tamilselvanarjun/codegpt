@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { ChatGPTAPI, ChatGPTConversation } from "chatgpt";
 import sidebarHTML from "./sidebar.html";
-import { debounce } from "ts-debounce";
+import { createPrompt } from "./utils";
 
 // Test this
 // undefined > undefined
@@ -9,50 +9,6 @@ import { debounce } from "ts-debounce";
 // "a" > "a"
 function undefinedIfEmpty(str: string | undefined) {
   return (str ?? "").length > 0 ? str : undefined;
-}
-
-function createPrompt(
-  userInput?: string,
-  preset?: string,
-  currentSelection?: string,
-  currentBuffer?: string
-): string {
-  if (preset) {
-    return preset + "\n" + (userInput ?? currentSelection ?? currentBuffer ?? "");
-  }
-  // If preset is not set, return selection + userInput or just user input if no selection
-  else {
-    // (textarea can be empty - like for an error message)
-    if (currentSelection) {
-      return `${currentSelection}
-
-    ${userInput}`;
-    } else {
-      // We don't allow current file because otherwise, there would be no way to do just
-      // do prompts directly like "Generate a discord bot that tells funny jokes"
-      // TODO: Check out OG demo to see what they do
-      return userInput ?? "";
-    }
-  }
-  return "";
-}
-
-function runTests() {
-  // console.log("start tests....");
-  // const presetNoInputActual = createPrompt(undefined, "explain this code: ", "main()");
-  // const presetNoInputExpect = "explain this code: \nmain()";
-  // console.log("actual", presetNoInputActual, "expected", presetNoInputExpect);
-  // console.log(presetNoInputActual === presetNoInputExpect);
-  // const presetNoInputNoSelectionActual = createPrompt(undefined, "explain this code: ");
-  // const presetNoInputNoSelection = "explain this code: \n";
-  // console.log("actual", presetNoInputNoSelectionActual, "expected", presetNoInputNoSelection);
-  // console.log(presetNoInputNoSelectionActual === presetNoInputNoSelection);
-  // prompt = "Explain this code:", currentBuffer = "long file"
-  // output = "Explain this code: long file"
-  // userInput = "how do you create a new class in Javascript"?
-  // output = same
-  // userInput = "change const to let", selection = "const a = 5;"
-  // output = "const a = 5;\nchange const to let"
 }
 
 // Main function when starting the extension
