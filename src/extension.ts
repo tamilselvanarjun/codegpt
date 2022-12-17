@@ -1,15 +1,7 @@
 import * as vscode from "vscode";
 import { ChatGPTAPI, ChatGPTConversation } from "chatgpt";
 import sidebarHTML from "./sidebar.html";
-import { createPrompt } from "./utils";
-
-// Test this
-// undefined > undefined
-// "" > undefined
-// "a" > "a"
-function undefinedIfEmpty(str: string | undefined) {
-  return (str ?? "").length > 0 ? str : undefined;
-}
+import { createPrompt, undefinedIfEmpty } from "./utils";
 
 // Main function when starting the extension
 export function activate(context: vscode.ExtensionContext) {
@@ -29,6 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
   });
   context.subscriptions.push(disposable);
 }
+
+// This method is called when your extension is deactivated
+export function deactivate() {}
 
 class ChatGPTViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "chatgpt.chatView";
@@ -207,6 +202,3 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     }
   }
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}

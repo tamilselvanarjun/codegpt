@@ -1,3 +1,7 @@
+export function undefinedIfEmpty(str: string | undefined) {
+  return (str ?? "").length > 0 ? str : undefined;
+}
+
 export function createPrompt(
   userInput?: string,
   preset?: string,
