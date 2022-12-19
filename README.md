@@ -1,6 +1,6 @@
 # CodeGPT (CURRENTLY NOT WORKING)
 
-**Update (Dec 14):** OpenAI made the unofficial API for ChatGPT harder to access and I need to upgrade the the NPM module this extension uses to bypass the latest protections. Should be fixed by Dec 16. Check back then. - Abi
+**Update (Dec 14):** OpenAI made the unofficial API for ChatGPT harder to access and there aren't any good workarounds at the moment so the extension is not functional for the time being. - Abi
 
 This is very much an alpha. The error handling needs to be significantly improved.
 
